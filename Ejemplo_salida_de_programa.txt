@@ -1,0 +1,123 @@
+=== Configuración del Modelo de Fuerza de Trabajo ===
+Ingrese el número total de semanas: 5
+
+Ingrese la demanda mínima de trabajadores para cada semana:
+  Semana 1: 5
+  Semana 2: 7
+  Semana 3: 8
+  Semana 4: 4
+  Semana 5: 6
+
+Ingrese los costos asociados:
+  Costo por trabajador extra por semana (Ej. 300): 300
+  Costo fijo por contratación (Ej. 400): 400
+  Costo variable por trabajador contratado (Ej. 200): 200
+
+Trabajadores iniciales antes de la semana 1 (usualmente 0): 0
+
+Datos registrados exitosamente. Calculando...
+
+=======================================================
+--- ETAPA 5 (Demanda mínima b_5: 6) ---
+Fórmula: Costo Total = Costo Transición + Costo Futuro Acumulado
+
+  Evaluando Estado anterior (x_4 = 4):
+    -> Opción x_5 = 6 | $800.00 + $0.00 = $800.00
+    -> Opción x_5 = 7 | $1300.00 + $0.00 = $1300.00
+    -> Opción x_5 = 8 | $1800.00 + $0.00 = $1800.00
+    ★ ÓPTIMO para x_4=4: Decidir x_5=6 (Costo Acumulado: $800.00)
+
+  Evaluando Estado anterior (x_4 = 5):
+    -> Opción x_5 = 6 | $600.00 + $0.00 = $600.00
+    -> Opción x_5 = 7 | $1100.00 + $0.00 = $1100.00
+    -> Opción x_5 = 8 | $1600.00 + $0.00 = $1600.00
+    ★ ÓPTIMO para x_4=5: Decidir x_5=6 (Costo Acumulado: $600.00)
+
+  Evaluando Estado anterior (x_4 = 6):
+    -> Opción x_5 = 6 | $0.00 + $0.00 = $0.00
+    -> Opción x_5 = 7 | $900.00 + $0.00 = $900.00
+    -> Opción x_5 = 8 | $1400.00 + $0.00 = $1400.00
+    ★ ÓPTIMO para x_4=6: Decidir x_5=6 (Costo Acumulado: $0.00)
+
+  Evaluando Estado anterior (x_4 = 7):
+    -> Opción x_5 = 6 | $0.00 + $0.00 = $0.00
+    -> Opción x_5 = 7 | $300.00 + $0.00 = $300.00
+    -> Opción x_5 = 8 | $1200.00 + $0.00 = $1200.00
+    ★ ÓPTIMO para x_4=7: Decidir x_5=6 (Costo Acumulado: $0.00)
+
+  Evaluando Estado anterior (x_4 = 8):
+    -> Opción x_5 = 6 | $0.00 + $0.00 = $0.00
+    -> Opción x_5 = 7 | $300.00 + $0.00 = $300.00
+    -> Opción x_5 = 8 | $600.00 + $0.00 = $600.00
+    ★ ÓPTIMO para x_4=8: Decidir x_5=6 (Costo Acumulado: $0.00)
+
+=================================================================
+--- ETAPA 4 (Demanda mínima b_4: 4) ---
+Fórmula: Costo Total = Costo Transición + Costo Futuro Acumulado
+
+  Evaluando Estado anterior (x_3 = 8):
+    -> Opción x_4 = 4 | $0.00 + $800.00 = $800.00
+    -> Opción x_4 = 5 | $300.00 + $600.00 = $900.00
+    -> Opción x_4 = 6 | $600.00 + $0.00 = $600.00
+    -> Opción x_4 = 7 | $900.00 + $0.00 = $900.00
+    -> Opción x_4 = 8 | $1200.00 + $0.00 = $1200.00
+    ★ ÓPTIMO para x_3=8: Decidir x_4=6 (Costo Acumulado: $600.00)
+
+=================================================================
+--- ETAPA 3 (Demanda mínima b_3: 8) ---
+Fórmula: Costo Total = Costo Transición + Costo Futuro Acumulado
+
+  Evaluando Estado anterior (x_2 = 7):
+    -> Opción x_3 = 8 | $600.00 + $600.00 = $1200.00
+    ★ ÓPTIMO para x_2=7: Decidir x_3=8 (Costo Acumulado: $1200.00)
+
+  Evaluando Estado anterior (x_2 = 8):
+    -> Opción x_3 = 8 | $0.00 + $600.00 = $600.00
+    ★ ÓPTIMO para x_2=8: Decidir x_3=8 (Costo Acumulado: $600.00)
+
+=================================================================
+--- ETAPA 2 (Demanda mínima b_2: 7) ---
+Fórmula: Costo Total = Costo Transición + Costo Futuro Acumulado
+
+  Evaluando Estado anterior (x_1 = 5):
+    -> Opción x_2 = 7 | $800.00 + $1200.00 = $2000.00
+    -> Opción x_2 = 8 | $1300.00 + $600.00 = $1900.00
+    ★ ÓPTIMO para x_1=5: Decidir x_2=8 (Costo Acumulado: $1900.00)
+
+  Evaluando Estado anterior (x_1 = 6):
+    -> Opción x_2 = 7 | $600.00 + $1200.00 = $1800.00
+    -> Opción x_2 = 8 | $1100.00 + $600.00 = $1700.00
+    ★ ÓPTIMO para x_1=6: Decidir x_2=8 (Costo Acumulado: $1700.00)
+
+  Evaluando Estado anterior (x_1 = 7):
+    -> Opción x_2 = 7 | $0.00 + $1200.00 = $1200.00
+    -> Opción x_2 = 8 | $900.00 + $600.00 = $1500.00
+    ★ ÓPTIMO para x_1=7: Decidir x_2=7 (Costo Acumulado: $1200.00)
+
+  Evaluando Estado anterior (x_1 = 8):
+    -> Opción x_2 = 7 | $0.00 + $1200.00 = $1200.00
+    -> Opción x_2 = 8 | $300.00 + $600.00 = $900.00
+    ★ ÓPTIMO para x_1=8: Decidir x_2=8 (Costo Acumulado: $900.00)
+
+=================================================================
+--- ETAPA 1 (Demanda mínima b_1: 5) ---
+Fórmula: Costo Total = Costo Transición + Costo Futuro Acumulado
+
+  Evaluando Estado anterior (x_0 = 0):
+    -> Opción x_1 = 5 | $1400.00 + $1900.00 = $3300.00
+    -> Opción x_1 = 6 | $1900.00 + $1700.00 = $3600.00
+    -> Opción x_1 = 7 | $2400.00 + $1200.00 = $3600.00
+    -> Opción x_1 = 8 | $2900.00 + $900.00 = $3800.00
+    ★ ÓPTIMO para x_0=0: Decidir x_1=5 (Costo Acumulado: $3300.00)
+
+=================================================================
+
+=== RUTA ÓPTIMA Y RESULTADO FINAL ===
+Costo Mínimo Total: $3300.00
+
+Plan de Contratación:
+  Semana 1: Necesarios 5 -> Mantener/Contratar hasta tener 5 trabajadores.
+  Semana 2: Necesarios 7 -> Mantener/Contratar hasta tener 8 trabajadores.
+  Semana 3: Necesarios 8 -> Mantener/Contratar hasta tener 8 trabajadores.
+  Semana 4: Necesarios 4 -> Mantener/Contratar hasta tener 6 trabajadores.
+  Semana 5: Necesarios 6 -> Mantener/Contratar hasta tener 6 trabajadores.
