@@ -1,0 +1,107 @@
+import math
+
+class CalculadoraCostos:
+    def __init__(self, costo_retencion, costo_fijo_contratacion, costo_var_contratacion):
+        self.costo_retencion = costo_retencion
+        self.costo_fijo = costo_fijo_contratacion
+        self.costo_var = costo_var_contratacion
+
+    def calcular_costo_transicion(self, trabajadores_previos, trabajadores_actuales, demanda_actual):
+        """Calcula el costo de retener exceso de personal y de contratar nuevos."""
+        costo_exceso = self.costo_retencion * (trabajadores_actuales - demanda_actual)
+        
+        costo_contratacion = 0
+        if trabajadores_actuales > trabajadores_previos:
+            costo_contratacion = self.costo_fijo + self.costo_var * (trabajadores_actuales - trabajadores_previos)
+            
+        return costo_exceso + costo_contratacion
+
+
+class ModeloFuerzaTrabajo:
+    def __init__(self):
+        self.semanas = 0
+        self.demandas = []
+        self.max_demanda = 0
+        self.trabajadores_iniciales = 0
+        self.calculadora = None
+        self.tabla_dp = {}
+        self.decisiones = {}
+
+    def ingresar_datos(self):
+        print("=== Configuración del Modelo de Fuerza de Trabajo ===")
+        self.semanas = int(input("Ingrese el número total de semanas: "))
+        
+        print("\nIngrese la demanda mínima de trabajadores para cada semana:")
+        for i in range(self.semanas):
+            demanda = int(input(f"  Semana {i+1}: "))
+            self.demandas.append(demanda)
+            
+        self.max_demanda = max(self.demandas)
+        
+        print("\nIngrese los costos asociados:")
+        c_retencion = float(input("  Costo por trabajador extra por semana (Ej. 300): "))
+        c_fijo = float(input("  Costo fijo por contratación (Ej. 400): "))
+        c_var = float(input("  Costo variable por trabajador contratado (Ej. 200): "))
+        
+        self.trabajadores_iniciales = int(input("\nTrabajadores iniciales antes de la semana 1 (usualmente 0): "))
+        
+        self.calculadora = CalculadoraCostos(c_retencion, c_fijo, c_var)
+        print("\nDatos registrados exitosamente. Calculando...\n")
+        print("="*55)
+
+    def resolver(self):
+        """Ejecuta el algoritmo de Programación Dinámica hacia atrás."""
+        self.tabla_dp[self.semanas + 1] = {x: 0 for x in range(self.max_demanda + 1)}
+        
+        for semana in range(self.semanas, 0, -1):
+            demanda_actual = self.demandas[semana - 1]
+            estado_siguiente = self.tabla_dp[semana + 1]
+            
+            resultados_semana = {}
+            decisiones_semana = {}
+            
+            rango_previos = range(0, self.max_demanda + 1) if semana == 1 else range(self.demandas[semana-2], self.max_demanda + 1)
+            if semana == 1:
+                rango_previos = [self.trabajadores_iniciales] 
+                
+            print(f"--- ETAPA {semana} (Demanda mínima: {demanda_actual}) ---")
+            
+            for prev_x in rango_previos:
+                min_costo = math.inf
+                mejor_decision = -1
+                
+                for actual_x in range(demanda_actual, self.max_demanda + 1):
+                    costo_etapa = self.calculadora.calcular_costo_transicion(prev_x, actual_x, demanda_actual)
+                    costo_total = costo_etapa + estado_siguiente[actual_x]
+                    
+                    if costo_total < min_costo:
+                        min_costo = costo_total
+                        mejor_decision = actual_x
+                        
+                resultados_semana[prev_x] = min_costo
+                decisiones_semana[prev_x] = mejor_decision
+                print(f"Estado x_{semana-1} = {prev_x:2d} | Decisión óptima x_{semana} = {mejor_decision:2d} | Costo Acumulado = ${min_costo:.2f}")
+                
+            self.tabla_dp[semana] = resultados_semana
+            self.decisiones[semana] = decisiones_semana
+            print("-" * 55)
+
+    def mostrar_solucion_optima(self):
+        """Reconstruye y muestra la ruta de decisiones óptimas."""
+        print("\n=== RUTA ÓPTIMA Y RESULTADO FINAL ===")
+        estado_actual = self.trabajadores_iniciales
+        costo_total_minimo = self.tabla_dp[1][estado_actual]
+        
+        print(f"Costo Mínimo Total: ${costo_total_minimo:.2f}\n")
+        print("Plan de Contratación:")
+        for semana in range(1, self.semanas + 1):
+            decision = self.decisiones[semana][estado_actual]
+            print(f"  Semana {semana}: Necesarios {self.demandas[semana-1]} -> Mantener/Contratar hasta tener {decision} trabajadores.")
+            estado_actual = decision
+
+
+if __name__ == "__main__":
+    modelo = ModeloFuerzaTrabajo()
+    modelo.ingresar_datos()
+    modelo.resolver()
+    modelo.mostrar_solucion_optima()
