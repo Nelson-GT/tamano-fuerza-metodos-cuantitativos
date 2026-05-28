@@ -50,9 +50,9 @@ class ModeloFuerzaTrabajo:
         print("="*55)
 
     def resolver(self):
-        """Ejecuta el algoritmo de Programación Dinámica hacia atrás."""
         self.tabla_dp[self.semanas + 1] = {x: 0 for x in range(self.max_demanda + 1)}
         
+        # Recorrer hacia atrás: desde la última semana hasta la primera
         for semana in range(self.semanas, 0, -1):
             demanda_actual = self.demandas[semana - 1]
             estado_siguiente = self.tabla_dp[semana + 1]
@@ -64,15 +64,21 @@ class ModeloFuerzaTrabajo:
             if semana == 1:
                 rango_previos = [self.trabajadores_iniciales] 
                 
-            print(f"--- ETAPA {semana} (Demanda mínima: {demanda_actual}) ---")
+            print(f"--- ETAPA {semana} (Demanda mínima b_{semana}: {demanda_actual}) ---")
+            print("Fórmula: Costo Total = Costo Transición + Costo Futuro Acumulado")
             
             for prev_x in rango_previos:
                 min_costo = math.inf
                 mejor_decision = -1
                 
+                print(f"\n  Evaluando Estado anterior (x_{semana-1} = {prev_x}):")
+                
                 for actual_x in range(demanda_actual, self.max_demanda + 1):
                     costo_etapa = self.calculadora.calcular_costo_transicion(prev_x, actual_x, demanda_actual)
-                    costo_total = costo_etapa + estado_siguiente[actual_x]
+                    costo_futuro = estado_siguiente[actual_x]
+                    costo_total = costo_etapa + costo_futuro
+                    
+                    print(f"    -> Opción x_{semana} = {actual_x} | ${costo_etapa:.2f} + ${costo_futuro:.2f} = ${costo_total:.2f}")
                     
                     if costo_total < min_costo:
                         min_costo = costo_total
@@ -80,14 +86,13 @@ class ModeloFuerzaTrabajo:
                         
                 resultados_semana[prev_x] = min_costo
                 decisiones_semana[prev_x] = mejor_decision
-                print(f"Estado x_{semana-1} = {prev_x:2d} | Decisión óptima x_{semana} = {mejor_decision:2d} | Costo Acumulado = ${min_costo:.2f}")
+                print(f"    ★ ÓPTIMO para x_{semana-1}={prev_x}: Decidir x_{semana}={mejor_decision} (Costo Acumulado: ${min_costo:.2f})")
                 
             self.tabla_dp[semana] = resultados_semana
             self.decisiones[semana] = decisiones_semana
-            print("-" * 55)
+            print("\n" + "=" * 65)
 
     def mostrar_solucion_optima(self):
-        """Reconstruye y muestra la ruta de decisiones óptimas."""
         print("\n=== RUTA ÓPTIMA Y RESULTADO FINAL ===")
         estado_actual = self.trabajadores_iniciales
         costo_total_minimo = self.tabla_dp[1][estado_actual]
