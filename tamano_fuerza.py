@@ -1,3 +1,5 @@
+# Desarrollado por: Nelson Guerrero y Juan Diego Cordero.
+
 import math
 
 class CalculadoraCostos:
@@ -28,8 +30,8 @@ class ModeloFuerzaTrabajo:
         self.decisiones = {}
 
     def ingresar_datos(self):
-        print("=== Configuración del Modelo de Fuerza de Trabajo ===")
-        self.semanas = int(input("Ingrese el número total de semanas: "))
+        print("--- CONFIGURACIÓN DEL MODELO DE FUERZA DE TRABAJO ---")
+        self.semanas = int(input("\nIngrese el número total de semanas: "))
         
         print("\nIngrese la demanda mínima de trabajadores para cada semana:")
         for i in range(self.semanas):
@@ -39,20 +41,20 @@ class ModeloFuerzaTrabajo:
         self.max_demanda = max(self.demandas)
         
         print("\nIngrese los costos asociados:")
-        c_retencion = float(input("  Costo por trabajador extra por semana (Ej. 300): "))
-        c_fijo = float(input("  Costo fijo por contratación (Ej. 400): "))
-        c_var = float(input("  Costo variable por trabajador contratado (Ej. 200): "))
+        c_retencion = float(input("  Costo por trabajador excedente por semana (e.g. 300): "))
+        c_fijo = float(input("  Costo fijo por contratación (e.g. 400): "))
+        c_var = float(input("  Costo variable por trabajador contratado por semana (e.g. 200): "))
         
         self.trabajadores_iniciales = int(input("\nTrabajadores iniciales antes de la semana 1 (usualmente 0): "))
         
         self.calculadora = CalculadoraCostos(c_retencion, c_fijo, c_var)
-        print("\nDatos registrados exitosamente. Calculando...\n")
-        print("="*55)
+        print("\nDatos registrados exitosamente.\nCalculando...\n")
+        print("-" * 55)
 
     def resolver(self):
         self.tabla_dp[self.semanas + 1] = {x: 0 for x in range(self.max_demanda + 1)}
         
-        # Recorrer hacia atrás: desde la última semana hasta la primera
+        # Recorrer hacia atrás (backward): desde la última semana hasta la primera.
         for semana in range(self.semanas, 0, -1):
             demanda_actual = self.demandas[semana - 1]
             estado_siguiente = self.tabla_dp[semana + 1]
@@ -64,14 +66,14 @@ class ModeloFuerzaTrabajo:
             if semana == 1:
                 rango_previos = [self.trabajadores_iniciales] 
                 
-            print(f"--- ETAPA {semana} (Demanda mínima b_{semana}: {demanda_actual}) ---")
-            print("Fórmula: Costo Total = Costo Transición + Costo Futuro Acumulado")
+            print(f"\n--- ETAPA {semana} (Demanda mínima (b_{semana}) = {demanda_actual}) ---")
+            print("\nFórmula --> Costo Total = Costo Transición + Costo Futuro Acumulado")
             
             for prev_x in rango_previos:
                 min_costo = math.inf
                 mejor_decision = -1
                 
-                print(f"\n  Evaluando Estado anterior (x_{semana-1} = {prev_x}):")
+                print(f"\n  Evaluando estado anterior (x_{semana-1} = {prev_x}):")
                 
                 for actual_x in range(demanda_actual, self.max_demanda + 1):
                     costo_etapa = self.calculadora.calcular_costo_transicion(prev_x, actual_x, demanda_actual)
@@ -86,14 +88,14 @@ class ModeloFuerzaTrabajo:
                         
                 resultados_semana[prev_x] = min_costo
                 decisiones_semana[prev_x] = mejor_decision
-                print(f"    ★ ÓPTIMO para x_{semana-1}={prev_x}: Decidir x_{semana}={mejor_decision} (Costo Acumulado: ${min_costo:.2f})")
+                print(f"    R = ÓPTIMO para x_{semana-1} = {prev_x}: Decidir x_{semana} = {mejor_decision} (Costo Acumulado: ${min_costo:.2f})")
                 
             self.tabla_dp[semana] = resultados_semana
             self.decisiones[semana] = decisiones_semana
-            print("\n" + "=" * 65)
+            print("\n" + "-" * 65)
 
     def mostrar_solucion_optima(self):
-        print("\n=== RUTA ÓPTIMA Y RESULTADO FINAL ===")
+        print("\n--- RUTA ÓPTIMA Y RESULTADO FINAL ---")
         estado_actual = self.trabajadores_iniciales
         costo_total_minimo = self.tabla_dp[1][estado_actual]
         
@@ -101,7 +103,7 @@ class ModeloFuerzaTrabajo:
         print("Plan de Contratación:")
         for semana in range(1, self.semanas + 1):
             decision = self.decisiones[semana][estado_actual]
-            print(f"  Semana {semana}: Necesarios {self.demandas[semana-1]} -> Mantener/Contratar hasta tener {decision} trabajadores.")
+            print(f"  Semana {semana}: Necesarios {self.demandas[semana-1]} -> Mantener/contratar hasta tener {decision} trabajadores.")
             estado_actual = decision
 
 
