@@ -1,2 +1,2 @@
 > [!IMPORTANT]
-> Elaborador por: Nelson Guerrero
+> Elaborador por: Nelson Guerrero y Juan Cordero
